@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule as NestJsJwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
-import { JwtService } from './jwt.service';
+import { NestJsJwtService } from './jwt.service';
 
 @Module({
   imports: [
@@ -21,6 +21,7 @@ import { JwtService } from './jwt.service';
       }),
     }),
   ],
-  providers: [JwtService],
+  providers: [NestJsJwtService],
+  exports: [NestJsJwtService, NestJsJwtModule],
 })
 export class JwtModule {}
