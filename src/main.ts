@@ -1,7 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule } from '@nestjs/swagger';
-import { doubleCsrf, DoubleCsrfConfigOptions } from 'csrf-csrf';
 import helmet from 'helmet';
 
 import { AppModule } from './app.module';
@@ -10,18 +10,7 @@ import { swaggerConfig } from './config/swagger-config';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // csrf protection
-  const doubleCsrfOptions: DoubleCsrfConfigOptions = {
-    getSecret: () => process.env.CSRF_SECRET,
-    cookieName: 'csrf-token',
-    size: 64,
-    ignoredMethods: ['GET', 'HEAD', 'OPTIONS'],
-    getTokenFromRequest: (req) => req.headers['x-csrf-token'] as string,
-  };
-
-  const { doubleCsrfProtection } = doubleCsrf(doubleCsrfOptions);
-
-  app.use(doubleCsrfProtection);
+  const configService = app.get(ConfigService);
 
   app.setGlobalPrefix('api/v1/flights');
 
@@ -29,18 +18,12 @@ async function bootstrap() {
 
   app.enableCors({
     origin: '*',
-    methods: 'GET,POST,PUT,DELETE',
+    methods: 'GET,POST,PUT,DELETE,PATCH,OPTIONS',
     credentials: true,
     allowedHeaders: 'Content-Type,Authorization,application/json',
   });
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      forbidNonWhitelisted: true,
-    }),
-  );
+  app.useGlobalPipes(new ValidationPipe());
 
   const document = SwaggerModule.createDocument(app, swaggerConfig, {
     ignoreGlobalPrefix: false,
@@ -49,7 +32,7 @@ async function bootstrap() {
 
   SwaggerModule.setup('api/v1/docs', app, document);
 
-  await app.listen(process.env.PORT ?? 5000);
+  await app.listen(configService.get<string>('PORT') ?? 5000);
 }
 
 void bootstrap();

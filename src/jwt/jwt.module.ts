@@ -9,6 +9,7 @@ import { NestJsJwtService } from './jwt.service';
   imports: [
     PassportModule.register({
       defaultStrategy: 'jwt',
+      session: true,
     }),
     NestJsJwtModule.registerAsync({
       imports: [ConfigModule],

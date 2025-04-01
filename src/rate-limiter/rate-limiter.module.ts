@@ -4,7 +4,7 @@ import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
 
 @Module({
   imports: [
-    ConfigModule, // Imports ConfigModule to access environment variables
+    ConfigModule,
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -1,44 +1,45 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-import {
-  IsArray,
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUrl,
-  MinLength,
-} from 'class-validator';
-import { IsImageFile } from 'src/utils/image-validator';
+import { ApiProperty } from '@nestjs/swagger';
+
+import { UserRoles } from 'src/auth/dtos/register-user.dto';
 
 export class CreateUserDto {
-  @IsString()
-  @IsNotEmpty()
-  firstName: string;
+  @ApiProperty({
+    required: true,
+    description: 'First name',
+  })
+  readonly firstName: string;
 
-  @IsString()
-  @IsNotEmpty()
-  lastName: string;
+  @ApiProperty({
+    required: true,
+    description: 'Last name',
+  })
+  readonly lastName: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(4)
-  username: string;
+  @ApiProperty({
+    required: true,
+    description: 'Username',
+  })
+  readonly username: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(8)
-  password: string;
+  @ApiProperty({
+    required: true,
+    description: 'Email',
+  })
+  readonly email: string;
 
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
+  @ApiProperty({
+    required: true,
+    description: 'User roles (USER or ADMIN)',
+  })
+  @ApiProperty({
+    required: true,
+    description: 'User roles (USER or ADMIN)',
+  })
+  readonly roles: UserRoles[];
 
-  @IsArray()
-  @IsOptional()
-  roles?: string[];
-
-  @IsUrl()
-  @IsOptional()
-  @IsImageFile()
-  profileImage?: string;
+  @ApiProperty({
+    required: false,
+    description: 'Profile Image URL',
+  })
+  readonly profileImage: string;
 }
