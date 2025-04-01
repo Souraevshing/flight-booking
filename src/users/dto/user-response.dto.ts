@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Exclude, Expose } from 'class-transformer';
+import { IsDate, IsUrl } from 'class-validator';
+
 import { User } from '../users.entity';
 
 @Exclude()
@@ -9,6 +10,9 @@ export class UserResponseDto {
 
   @Expose()
   email: string;
+
+  @Exclude()
+  password: string;
 
   @Expose()
   firstName: string;
@@ -23,10 +27,16 @@ export class UserResponseDto {
   isActive: boolean;
 
   @Expose()
+  @IsDate()
   createdAt: Date;
 
   @Expose()
+  @IsDate()
   updatedAt: Date;
+
+  @Expose()
+  @IsUrl()
+  profileImage: string;
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);

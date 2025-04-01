@@ -1,0 +1,5 @@
+{
+  "cSpell.words": ["dtos", "jwt"],
+  "javascript.format.enable": true,
+  "javascript.autoClosingTags": true
+}

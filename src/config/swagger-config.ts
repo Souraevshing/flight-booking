@@ -8,10 +8,10 @@ export const swaggerConfig = new DocumentBuilder()
     {
       type: 'http',
       scheme: 'bearer',
-      bearerFormat: 'JWT',
-      name: 'JWT',
+      bearerFormat: 'jwt',
+      name: 'jwt',
       in: 'header',
     },
-    'JWT',
+    'jwt',
   )
   .build();

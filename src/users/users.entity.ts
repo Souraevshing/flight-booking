@@ -1,4 +1,5 @@
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
+import { IsDate } from 'class-validator';
 import {
   BeforeInsert,
   Column,
@@ -25,16 +26,21 @@ export class User {
   @Column({ nullable: true })
   lastName: string;
 
-  @Column({ type: 'simple-array', default: ['user'] })
+  @Column({ type: 'simple-array', default: ['USER'] })
   roles: string[];
 
   @Column({ default: true })
   isActive: boolean;
 
+  @Column({ nullable: false })
+  profileImage: string;
+
   @CreateDateColumn()
+  @IsDate()
   createdAt: Date;
 
   @UpdateDateColumn()
+  @IsDate()
   updatedAt: Date;
 
   @BeforeInsert()

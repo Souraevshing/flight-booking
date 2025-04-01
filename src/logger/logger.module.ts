@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { utilities, WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 
+import { LoggerService } from './logger.service';
+
 @Module({
   imports: [
     WinstonModule.forRoot({
@@ -43,5 +45,6 @@ import * as winston from 'winston';
     }),
   ],
   exports: [WinstonModule],
+  providers: [LoggerService],
 })
 export class LoggerModule {}

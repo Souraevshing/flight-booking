@@ -2,12 +2,15 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+
+import { ResponseDto } from 'src/dtos/response.dto';
+import { UserResponseDto } from 'src/users/dto/user-response.dto';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
-    private readonly configService: ConfigService,
+    configService: ConfigService,
     private readonly usersService: UsersService,
   ) {
     super({
@@ -18,14 +21,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any): Promise<unknown> {
-    const user = await this.usersService.findById(payload.sub);
+  async validate(payload: {
+    sub: string;
+  }): Promise<UserResponseDto | ResponseDto> {
+    const user = await this.usersService.findUserById(payload.sub);
 
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
 
-    // The returned value will be attached to the Request object
     return user;
   }
 }
